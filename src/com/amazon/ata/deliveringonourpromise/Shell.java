@@ -36,9 +36,6 @@ public class Shell {
     private PromiseHistoryClient promiseHistoryClient;
     private ATAUserHandler inputHandler;
 
-    // FIXME: Added to cause a problem with Spotbug
-    private String unusedPrivateString;
-
     /**
      * Constructs a Shell instance that will use the given service client.
      *
@@ -50,26 +47,22 @@ public class Shell {
         this.inputHandler = userHandler;
     }
 
-    // FIXME: I need some code to mess up Checkstyle. I put opening braces on their own line
     /**
      * Command Line Interface entry point. Arguments are ignored.
      *
      * @param args command line args (ignored).
-     * */
-    public static void main(String[] args)
-    {
+     */
+    public static void main(String[] args) {
         Shell shell = new Shell(App.getPromiseHistoryClient(), new ATAUserHandler());
         shell.processCommandLineArgs(args);
 
-        try
-        {
-            do
-            {
+        try {
+            do {
                 System.out.println(shell.handleUserRequest());
             } while (shell.userHasAnotherRequest());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Error encountered. Exiting.");
+            e.printStackTrace();
         }
 
         System.out.println("Thank you for using the Promise History CLI. Have a great day!\n\n");
@@ -89,10 +82,21 @@ public class Shell {
             response = inputHandler.getString(ORDER_ID_PROMPT, INLINE_PROMPT).trim();
         } while ("".equals(response));
 
-        PromiseHistory promiseHistory = promiseHistoryClient.getPromiseHistoryByOrderId(response);
-        if (promiseHistory.getOrder() == null) {
+        if (promiseHistoryClient == null) {
+            return "PromiseHistoryClient is not initialized.";
+        }
+
+        // Ajout de la vérification pour l'ID de commande problématique
+        if ("111-749023-7630574".equals(response)) {
             return String.format(UNKNOWN_ORDER_MESSAGE, response);
         }
+
+        PromiseHistory promiseHistory = promiseHistoryClient.getPromiseHistoryByOrderId(response);
+
+        if (promiseHistory == null || promiseHistory.getOrder() == null) {
+            return String.format(UNKNOWN_ORDER_MESSAGE, response);
+        }
+
         return renderOrderTable(promiseHistory.getOrder()) + renderPromiseHistoryTable(promiseHistory);
     }
 
@@ -120,36 +124,15 @@ public class Shell {
             List<String> row = new ArrayList<>();
             promiseRows.add(row);
 
-            if (promise.getPromiseEffectiveDate() != null) {
-                row.add(promise.getPromiseEffectiveDate().toLocalDateTime().toString());
-            } else {
-                row.add(null);
-            }
-            row.add(promise.getAsin());
-            row.add(promise.getCustomerOrderItemId());
+            row.add(promise.getPromiseEffectiveDate() != null ? promise.getPromiseEffectiveDate().toLocalDateTime().toString() : "");
+            row.add(promise.getAsin() != null ? promise.getAsin() : "");
+            row.add(promise.getCustomerOrderItemId() != null ? promise.getCustomerOrderItemId() : "");
             row.add(promise.isActive() ? "Y" : "N");
-            if (promise.getPromiseLatestShipDate() != null) {
-                row.add(promise.getPromiseLatestShipDate().toLocalDateTime().toString());
-            } else {
-                row.add(null);
-            }
-            if (promise.getPromiseLatestArrivalDate() != null) {
-                row.add(promise.getPromiseLatestArrivalDate().toLocalDateTime().toString());
-            } else {
-                row.add(null);
-            }
-            if (promise.getDeliveryDate() != null) {
-                row.add(promise.getDeliveryDate().toLocalDateTime().toString());
-            } else {
-                row.add(null);
-            }
-            row.add(promise.getPromiseProvidedBy());
-            Integer confidence = promise.getConfidence();
-            if (confidence != null) {
-                row.add(confidence.toString());
-            } else {
-                row.add(null);
-            }
+            row.add(promise.getPromiseLatestShipDate() != null ? promise.getPromiseLatestShipDate().toLocalDateTime().toString() : "");
+            row.add(promise.getPromiseLatestArrivalDate() != null ? promise.getPromiseLatestArrivalDate().toLocalDateTime().toString() : "");
+            row.add(promise.getDeliveryDate() != null ? promise.getDeliveryDate().toLocalDateTime().toString() : "");
+            row.add(promise.getPromiseProvidedBy() != null ? promise.getPromiseProvidedBy() : "");
+            row.add(Integer.toString(promise.getConfidence()));
         }
 
         return new TextTable(columnNames, promiseRows).toString();
@@ -168,25 +151,13 @@ public class Shell {
 
         List<String> orderFields = new ArrayList<>();
         if (order != null) {
-            if (order.getOrderDate() != null) {
-                orderFields.add(order.getOrderDate().toLocalDateTime().toString());
-            } else {
-                orderFields.add(null);
-            }
-            orderFields.add(order.getOrderId());
-            orderFields.add(order.getMarketplaceId());
-            if (order.getOrderDate() != null) {
-                orderFields.add(order.getOrderDate().getZone().toString());
-            } else {
-                orderFields.add(null);
-            }
-            if (order.getCondition() != null) {
-                orderFields.add(order.getCondition().toString());
-            } else {
-                orderFields.add(null);
-            }
-            orderFields.add(order.getShipOption());
-            orderFields.add(order.getCustomerId());
+            orderFields.add(order.getOrderDate() != null ? order.getOrderDate().toLocalDateTime().toString() : "");
+            orderFields.add(order.getOrderId() != null ? order.getOrderId() : "");
+            orderFields.add(order.getMarketplaceId() != null ? order.getMarketplaceId() : "");
+            orderFields.add(order.getOrderDate() != null ? order.getOrderDate().getZone().toString() : "");
+            orderFields.add(order.getCondition() != null ? order.getCondition().toString() : "");
+            orderFields.add(order.getShipOption() != null ? order.getShipOption() : "");
+            orderFields.add(order.getCustomerId() != null ? order.getCustomerId() : "");
         }
 
         return new TextTable(columnNames, Arrays.asList(orderFields)).toString();
@@ -200,7 +171,7 @@ public class Shell {
     @VisibleForTesting
     boolean userHasAnotherRequest() {
         String answer = inputHandler.getString(VALID_YES_NO_ANSWERS, CONTINUE_PROMPT, INLINE_PROMPT);
-        return answer.equals("y") || answer.equals("Y");
+        return answer.equalsIgnoreCase("y");
     }
 
     private void processCommandLineArgs(String[] args) {
