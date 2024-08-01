@@ -1,41 +1,89 @@
-## `OrderDao` test plan
-This is a sample test plan template. Amazon teams may have different test plan
-expectations, different file formats, or even ignore test plans altogether.
+package com.amazon.ata.deliveringonourpromise.dao;
 
-Writing a test plan helps manage expectations and provides a goal before you
-begin writing the actual test code.
+import com.amazon.ata.deliveringonourpromise.types.Order;
+import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
+import com.amazon.ata.ordermanipulationauthority.OrderManipulationAuthority;
+import com.amazon.ata.ordermanipulationauthority.OrderResult;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-Remember from the unit test lesson that ATA expects test names to follow the
-pattern "methodName_testCase_expectedBehavior".
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-Every test plan has:
-1. A name
-    * A description
-2. Given  
-   The pre-conditions required for this test to work.
-   ATA expects this to be an unordered list. The items should be
-   related to the "testCase" portion of the test name.
-3. When  
-   The actions to take to achieve the desired result.
-   ATA expects this to be an ordered list, because the actions to take are
-   generally required to be taken in a particular order.
-   The items should include the "methodName" from the test name.
-4. Then  
-   Testable results.
-   ATA expects this to be an unordered list. The items should be
-   related to the "expectedBehavior" portion of the test name.
+public class OrderDaoTest {
 
-We've filled out a happy path test for the `OrderDao#get` method.
-Copy and modify it to complete your test plan.
+    @Mock
+    private OrderManipulationAuthorityClient mockOmaClient;
 
-### get_forKnownOrderId_returnsOrder
-Happy case, verifying that the OrderDao can return an order.
+    @Mock
+    private OrderManipulationAuthority mockOmaService;
 
-#### Given
-* An order ID that we know exists
+    private OrderDao orderDao;
 
-#### When
-1. We call `get()` with that order ID
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(mockOmaClient.getCustomerOrderByOrderId(anyString())).thenReturn(new OrderResult());
+        orderDao = new OrderDao(mockOmaClient);
+    }
 
-### Then
-* The result is not null
+    @Test
+    public void get_forKnownOrderId_returnsOrder() {
+        // GIVEN
+        String knownOrderId = "111-7497023-2960775";
+        OrderResult mockOrderResult = new OrderResult();
+        mockOrderResult.setOrderId(knownOrderId);
+        when(mockOmaClient.getCustomerOrderByOrderId(knownOrderId)).thenReturn(mockOrderResult);
+
+        // WHEN
+        Order result = orderDao.get(knownOrderId);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(knownOrderId, result.getOrderId());
+    }
+
+    @Test
+    public void get_forUnknownOrderId_returnsNull() {
+        // GIVEN
+        String unknownOrderId = "999-9999999-9999999";
+        when(mockOmaClient.getCustomerOrderByOrderId(unknownOrderId)).thenReturn(null);
+
+        // WHEN
+        Order result = orderDao.get(unknownOrderId);
+
+        // THEN
+        assertNull(result);
+    }
+
+    @Test
+    public void get_forNullOrderId_throwsException() {
+        // GIVEN
+        String nullOrderId = null;
+
+        // WHEN & THEN
+        assertThrows(IllegalArgumentException.class, () -> orderDao.get(nullOrderId));
+    }
+
+    @Test
+    public void get_forKnownOrderId_returnsCorrectOrder() {
+        // GIVEN
+        String knownOrderId = "111-7497023-2960775";
+        OrderResult mockOrderResult = new OrderResult();
+        mockOrderResult.setOrderId(knownOrderId);
+        mockOrderResult.setCustomerId("customer123");
+        mockOrderResult.setMarketplaceId("marketplace456");
+        when(mockOmaClient.getCustomerOrderByOrderId(knownOrderId)).thenReturn(mockOrderResult);
+
+        // WHEN
+        Order result = orderDao.get(knownOrderId);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(knownOrderId, result.getOrderId());
+        assertEquals("customer123", result.getCustomerId());
+        assertEquals("marketplace456", result.getMarketplaceId());
+    }
+}
