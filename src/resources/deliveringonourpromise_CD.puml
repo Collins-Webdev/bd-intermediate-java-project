@@ -1,0 +1,82 @@
+@startuml
+
+class App {
+  + {static} getPromiseHistoryClient(): PromiseHistoryClient
+}
+
+class Shell {
+  - promiseHistoryClient: PromiseHistoryClient
+  + handleUserRequest(): String
+  + userHasAnotherRequest(): boolean
+}
+
+class PromiseHistoryClient {
+  - getPromiseHistoryByOrderIdActivity: GetPromiseHistoryByOrderIdActivity
+  + getPromiseHistoryByOrderId(orderId: String): PromiseHistory
+}
+
+class GetPromiseHistoryByOrderIdActivity {
+  - orderDao: ReadOnlyDao<String, Order>
+  - promiseDao: ReadOnlyDao<String, List<Promise>>
+  + getPromiseHistoryByOrderId(orderId: String): PromiseHistory
+}
+
+class OrderDao {
+  - omaClient: OrderManipulationAuthorityClient
+  + get(orderId: String): Order
+}
+
+class PromiseDao {
+  - dpsClient: DeliveryPromiseServiceClient
+  - omaClient: OrderManipulationAuthorityClient
+  + get(customerOrderItemId: String): List<Promise>
+}
+
+class OrderManipulationAuthorityClient {
+  + getCustomerOrderByOrderId(orderId: String): OrderResult
+  + getCustomerOrderItemByOrderItemId(orderItemId: String): OrderResultItem
+}
+
+class DeliveryPromiseServiceClient {
+  + getDeliveryPromiseByOrderItemId(customerOrderItemId: String): Promise
+}
+
+interface ReadOnlyDao<I, O> {
+  + get(id: I): O
+}
+
+class Order {
+  - customerOrderItemList: List<OrderItem>
+}
+
+class OrderItem {
+  - customerOrderItemId: String
+  - asin: String
+}
+
+class Promise {
+}
+
+class PromiseHistory {
+  - order: Order
+  - promises: List<Promise>
+}
+
+App --> PromiseHistoryClient
+Shell --> PromiseHistoryClient
+PromiseHistoryClient --> GetPromiseHistoryByOrderIdActivity
+GetPromiseHistoryByOrderIdActivity --> OrderDao
+GetPromiseHistoryByOrderIdActivity --> PromiseDao
+OrderDao ..|> ReadOnlyDao
+PromiseDao ..|> ReadOnlyDao
+OrderDao --> OrderManipulationAuthorityClient
+PromiseDao --> OrderManipulationAuthorityClient
+PromiseDao --> DeliveryPromiseServiceClient
+GetPromiseHistoryByOrderIdActivity ..> Order
+GetPromiseHistoryByOrderIdActivity ..> Promise
+GetPromiseHistoryByOrderIdActivity ..> PromiseHistory
+Order o-- OrderItem
+PromiseHistory o-- Order
+PromiseHistory o-- Promise
+
+@enduml
