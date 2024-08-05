@@ -5,46 +5,21 @@ import com.amazon.ata.ordermanipulationauthority.OrderCondition;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
-
-/**
- * Represents a customer order.
- *
- * Construct an Order via the {@code Order.builder()...build();} pattern,
- * for example:
- *
- * <pre>{@code
- *   Order order = Order.builder()
- *                      .with(OrderId(orderId)
- *                      ...
- *                      .withCondition(condition)
- *                      .build();
- * }</pre>
- *
- * Explanation of fields:
- * * orderId: the unique identifier for this order
- * * customerId: the identifier for the customer who placed the order
- * * marketplaceId: the identifier corresponding to the marketplace the order was placed in
- * * condition: the current state of the Order (e.g. PENDING, CLOSED). See {@link OrderCondition}.
- * * customerOrderItemList: the list of items and their quantities in this order
- * * shipOption: which shipping option the customer selected for this order
- * * orderDate: the timestamp of when the order was placed
- */
 public class Order {
-    public String orderId;
-    public String customerId;
-    public String marketplaceId;
-    public OrderCondition condition;
-    public List<OrderItem> customerOrderItemList = new ArrayList<>();
-    public String shipOption;
-    public ZonedDateTime orderDate;
+    private String orderId;
+    private String customerId;
+    private String marketplaceId;
+    private OrderCondition condition;
+    private List<OrderItem> customerOrderItemList;
+    private String shipOption;
+    private ZonedDateTime orderDate;
 
-    private Order() { }
+    private Order() {
+        this.customerOrderItemList = new ArrayList<>();
+    }
 
-    /**
-     * Returns a new Order.Builder object for constructing an Order.
-     * @return new builder ready for constructing an Order
-     */
     public static Builder builder() {
         return new Builder();
     }
@@ -65,13 +40,8 @@ public class Order {
         return condition;
     }
 
-    /**
-     * Returns a list containing all of the order items in this order.
-     *
-     * @return a list containing all of the order items in this order
-     */
     public List<OrderItem> getCustomerOrderItemList() {
-        return customerOrderItemList;
+        return Collections.unmodifiableList(customerOrderItemList);
     }
 
     public String getShipOption() {
@@ -85,20 +55,16 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-               "orderId='" + orderId + '\'' +
-               ", customerId='" + customerId + '\'' +
-               ", marketplaceId='" + marketplaceId + '\'' +
-               ", condition=" + condition +
-               ", customerOrderItemList=" + customerOrderItemList +
-               ", shipOption='" + shipOption + '\'' +
-               ", orderDate=" + orderDate +
-               '}';
+                "orderId='" + orderId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", marketplaceId='" + marketplaceId + '\'' +
+                ", condition=" + condition +
+                ", customerOrderItemList=" + customerOrderItemList +
+                ", shipOption='" + shipOption + '\'' +
+                ", orderDate=" + orderDate +
+                '}';
     }
 
-
-    /**
-     * Builder for Orders. See Order documentation.
-     */
     public static class Builder {
         private String orderId;
         private String customerId;
@@ -108,8 +74,6 @@ public class Order {
         private String shipOption;
         private ZonedDateTime orderDate;
 
-        //CHECKSTYLE:OFF:HiddenField
-        //CHECKSTYLE:OFF:JavadocMethod
         public Builder withOrderId(String orderId) {
             this.orderId = orderId;
             return this;
@@ -130,14 +94,8 @@ public class Order {
             return this;
         }
 
-        /**
-         * Adds the given order item to the list of order items in this order.
-         *
-         * @param customerOrderItemList {@code List<OrderItem>} containing the order items to add to the order
-         * @return updated Builder
-         */
         public Builder withCustomerOrderItemList(List<OrderItem> customerOrderItemList) {
-            this.customerOrderItemList = customerOrderItemList;
+            this.customerOrderItemList = new ArrayList<>(customerOrderItemList);
             return this;
         }
 
@@ -150,25 +108,16 @@ public class Order {
             this.orderDate = orderDate;
             return this;
         }
-        //CHECKSTYLE:ON:JavadocMethod
-        //CHECKSTYLE:ON:HiddenField
 
-        /**
-         * Builds the Order object from the current Builder state.
-         *
-         * @return constructed Order object
-         */
         public Order build() {
             Order order = new Order();
-
-            order.orderId = orderId;
-            order.customerId = customerId;
-            order.marketplaceId = marketplaceId;
-            order.condition = condition;
-            order.customerOrderItemList = customerOrderItemList;
-            order.shipOption = shipOption;
-            order.orderDate = orderDate;
-
+            order.orderId = this.orderId;
+            order.customerId = this.customerId;
+            order.marketplaceId = this.marketplaceId;
+            order.condition = this.condition;
+            order.customerOrderItemList = new ArrayList<>(this.customerOrderItemList);
+            order.shipOption = this.shipOption;
+            order.orderDate = this.orderDate;
             return order;
         }
     }
