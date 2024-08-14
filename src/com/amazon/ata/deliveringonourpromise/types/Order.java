@@ -118,6 +118,7 @@ public class Order {
             order.customerOrderItemList = new ArrayList<>(this.customerOrderItemList);
             order.shipOption = this.shipOption;
             order.orderDate = this.orderDate;
+
             return order;
         }
     }
