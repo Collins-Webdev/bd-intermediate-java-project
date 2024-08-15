@@ -4,8 +4,8 @@ import com.amazon.ata.ordermanipulationauthority.OrderCondition;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents an order in the system.
@@ -112,13 +112,13 @@ public class Order {
      * Builder class for creating Order instances.
      */
     public static class Builder {
-        private String orderId;
-        private String customerId;
-        private String marketplaceId;
-        private OrderCondition condition;
-        private List<OrderItem> customerOrderItemList;
-        private String shipOption;
-        private ZonedDateTime orderDate;
+        private String builderOrderId;
+        private String builderCustomerId;
+        private String builderMarketplaceId;
+        private OrderCondition builderCondition;
+        private List<OrderItem> builderCustomerOrderItemList;
+        private String builderShipOption;
+        private ZonedDateTime builderOrderDate;
 
         /**
          * Sets the order ID.
@@ -127,7 +127,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withOrderId(String orderId) {
-            this.orderId = orderId;
+            this.builderOrderId = orderId;
             return this;
         }
 
@@ -138,7 +138,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withCustomerId(String customerId) {
-            this.customerId = customerId;
+            this.builderCustomerId = customerId;
             return this;
         }
 
@@ -149,7 +149,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withMarketplaceId(String marketplaceId) {
-            this.marketplaceId = marketplaceId;
+            this.builderMarketplaceId = marketplaceId;
             return this;
         }
 
@@ -160,7 +160,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withCondition(OrderCondition condition) {
-            this.condition = condition;
+            this.builderCondition = condition;
             return this;
         }
 
@@ -171,7 +171,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withCustomerOrderItemList(List<OrderItem> customerOrderItemList) {
-            this.customerOrderItemList = new ArrayList<>(customerOrderItemList);
+            this.builderCustomerOrderItemList = new ArrayList<>(customerOrderItemList);
             return this;
         }
 
@@ -182,7 +182,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withShipOption(String shipOption) {
-            this.shipOption = shipOption;
+            this.builderShipOption = shipOption;
             return this;
         }
 
@@ -193,7 +193,7 @@ public class Order {
          * @return the Builder instance
          */
         public Builder withOrderDate(ZonedDateTime orderDate) {
-            this.orderDate = orderDate;
+            this.builderOrderDate = orderDate;
             return this;
         }
 
@@ -204,13 +204,13 @@ public class Order {
          */
         public Order build() {
             Order order = new Order();
-            order.orderId = this.orderId;
-            order.customerId = this.customerId;
-            order.marketplaceId = this.marketplaceId;
-            order.condition = this.condition;
-            order.customerOrderItemList = new ArrayList<>(this.customerOrderItemList);
-            order.shipOption = this.shipOption;
-            order.orderDate = this.orderDate;
+            order.orderId = this.builderOrderId;
+            order.customerId = this.builderCustomerId;
+            order.marketplaceId = this.builderMarketplaceId;
+            order.condition = this.builderCondition;
+            order.customerOrderItemList = new ArrayList<>(this.builderCustomerOrderItemList);
+            order.shipOption = this.builderShipOption;
+            order.orderDate = this.builderOrderDate;
 
             return order;
         }
