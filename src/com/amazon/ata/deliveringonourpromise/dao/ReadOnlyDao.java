@@ -2,6 +2,9 @@ package com.amazon.ata.deliveringonourpromise.dao;
 
 /**
  * DAO interface to abstract calls.
+ *
+ * @param <I> The type of the input parameter (usually the ID)
+ * @param <O> The type of the output object
  */
 public interface ReadOnlyDao<I, O> {
 
@@ -12,3 +15,4 @@ public interface ReadOnlyDao<I, O> {
      */
     O get(I orderId);
 }
+
