@@ -208,7 +208,9 @@ public class Order {
             order.customerId = this.builderCustomerId;
             order.marketplaceId = this.builderMarketplaceId;
             order.condition = this.builderCondition;
-            order.customerOrderItemList = new ArrayList<>(this.builderCustomerOrderItemList);
+            order.customerOrderItemList = this.builderCustomerOrderItemList != null
+                    ? new ArrayList<>(this.builderCustomerOrderItemList)
+                    : new ArrayList<>();
             order.shipOption = this.builderShipOption;
             order.orderDate = this.builderOrderDate;
 
