@@ -124,12 +124,15 @@ public class Shell {
             List<String> row = new ArrayList<>();
             promiseRows.add(row);
 
-            row.add(promise.getPromiseEffectiveDate() != null ? promise.getPromiseEffectiveDate().toLocalDateTime().toString() : "");
+            row.add(promise.getPromiseEffectiveDate() != null ?
+                    promise.getPromiseEffectiveDate().toLocalDateTime().toString() : "");
             row.add(promise.getAsin() != null ? promise.getAsin() : "");
             row.add(promise.getCustomerOrderItemId() != null ? promise.getCustomerOrderItemId() : "");
             row.add(promise.isActive() ? "Y" : "N");
-            row.add(promise.getPromiseLatestShipDate() != null ? promise.getPromiseLatestShipDate().toLocalDateTime().toString() : "");
-            row.add(promise.getPromiseLatestArrivalDate() != null ? promise.getPromiseLatestArrivalDate().toLocalDateTime().toString() : "");
+            row.add(promise.getPromiseLatestShipDate() != null ?
+                    promise.getPromiseLatestShipDate().toLocalDateTime().toString() : "");
+            row.add(promise.getPromiseLatestArrivalDate() != null ?
+                    promise.getPromiseLatestArrivalDate().toLocalDateTime().toString() : "");
             row.add(promise.getDeliveryDate() != null ? promise.getDeliveryDate().toLocalDateTime().toString() : "");
             row.add(promise.getPromiseProvidedBy() != null ? promise.getPromiseProvidedBy() : "");
             row.add(Integer.toString(promise.getConfidence()));

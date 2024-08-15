@@ -38,13 +38,12 @@ public class GetPromiseHistoryByOrderIdActivity {
         if (null == orderId) {
             throw new IllegalArgumentException("order ID cannot be null");
         }
-        // FIXME: Add validation or logging if order is null
+
         Order order = orderDao.get(orderId);
 
-        // FIXME: Check if order is null before proceeding
         if (order == null) {
             System.out.println("Order not found for ID: " + orderId);
-            return new PromiseHistory(null); // Retourne un PromiseHistory avec une commande nulle
+            return new PromiseHistory(null);
         }
 
         List<OrderItem> customerOrderItems = order.getCustomerOrderItemList();
@@ -56,7 +55,7 @@ public class GetPromiseHistoryByOrderIdActivity {
         PromiseHistory history = new PromiseHistory(order);
         if (customerOrderItem != null) {
             List<Promise> promises = promiseDao.get(customerOrderItem.getCustomerOrderItemId());
-            if (promises != null) { // Ajoutez une vérification pour voir si les promesses sont null
+            if (promises != null) {
                 for (Promise promise : promises) {
                     promise.setConfidence(customerOrderItem.isConfidenceTracked(), customerOrderItem.getConfidence());
                     history.addPromise(promise);
@@ -66,5 +65,4 @@ public class GetPromiseHistoryByOrderIdActivity {
 
         return history;
     }
-
 }
