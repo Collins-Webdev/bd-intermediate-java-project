@@ -25,7 +25,6 @@ import java.util.logging.Logger;
  */
 public class Shell {
     private static final Logger LOGGER = Logger.getLogger(Shell.class.getName());
-    public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
     private static final String CONTINUE_PROMPT = "Would you like to enter another orderId? (y/n)";
     private static final Collection<String> VALID_YES_NO_ANSWERS =
             Collections.unmodifiableList(Arrays.asList("y", "n", "Y", "N"));
@@ -33,8 +32,9 @@ public class Shell {
             "Please enter the orderId you would like to view the Promise History for.";
     private static final String UNKNOWN_ORDER_MESSAGE =
             "Unable to find any order data for orderId: %s. Please check your order id and try again.";
-
     private static final String INLINE_PROMPT = "> ";
+
+    public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
 
     private final PromiseHistoryClient promiseHistoryClient;
     private final ATAUserHandler inputHandler;
@@ -191,3 +191,4 @@ public class Shell {
         return OrderDatastore.getDatastore().getOrderFixturesTable();
     }
 }
+
