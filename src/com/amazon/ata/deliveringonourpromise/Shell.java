@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Owns the UI for the DeliveringOnOurPromise app. Provides command-line interface
@@ -32,9 +30,8 @@ public class Shell {
             "Please enter the orderId you would like to view the Promise History for.";
     private static final String UNKNOWN_ORDER_MESSAGE =
             "Unable to find any order data for orderId: %s. Please check your order id and try again.";
-    private static final String INLINE_PROMPT = "> ";
 
-    private static final Logger LOGGER = Logger.getLogger(Shell.class.getName());
+    private static final String INLINE_PROMPT = "> ";
 
     private PromiseHistoryClient promiseHistoryClient;
     private ATAUserHandler inputHandler;
@@ -64,7 +61,8 @@ public class Shell {
                 System.out.println(shell.handleUserRequest());
             } while (shell.userHasAnotherRequest());
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error encountered. Exiting.", e);
+            System.out.println("Error encountered. Exiting.");
+            e.printStackTrace();
         }
 
         System.out.println("Thank you for using the Promise History CLI. Have a great day!\n\n");
@@ -190,3 +188,4 @@ public class Shell {
         return OrderDatastore.getDatastore().getOrderFixturesTable();
     }
 }
+
