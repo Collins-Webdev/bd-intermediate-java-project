@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Owns the UI for the DeliveringOnOurPromise app. Provides command-line interface
@@ -22,6 +24,7 @@ import java.util.List;
  * and displaying the results.
  */
 public class Shell {
+    private static final Logger LOGGER = Logger.getLogger(Shell.class.getName());
     public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
     private static final String CONTINUE_PROMPT = "Would you like to enter another orderId? (y/n)";
     private static final Collection<String> VALID_YES_NO_ANSWERS =
@@ -62,7 +65,7 @@ public class Shell {
             } while (shell.userHasAnotherRequest());
         } catch (Exception e) {
             System.out.println("Error encountered. Exiting.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An error occurred", e);
         }
 
         System.out.println("Thank you for using the Promise History CLI. Have a great day!\n\n");
@@ -188,4 +191,3 @@ public class Shell {
         return OrderDatastore.getDatastore().getOrderFixturesTable();
     }
 }
-
