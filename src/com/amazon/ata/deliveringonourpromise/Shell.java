@@ -36,8 +36,8 @@ public class Shell {
 
     private static final String INLINE_PROMPT = "> ";
 
-    private PromiseHistoryClient promiseHistoryClient;
-    private ATAUserHandler inputHandler;
+    private final PromiseHistoryClient promiseHistoryClient;
+    private final ATAUserHandler inputHandler;
 
     /**
      * Constructs a Shell instance that will use the given service client.
