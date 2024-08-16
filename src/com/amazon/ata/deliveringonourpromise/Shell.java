@@ -36,8 +36,8 @@ public class Shell {
 
     public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
 
-    private final PromiseHistoryClient promiseHistoryClient;
     private final ATAUserHandler inputHandler;
+    private final PromiseHistoryClient promiseHistoryClient;
 
     /**
      * Constructs a Shell instance that will use the given service client.
@@ -46,8 +46,8 @@ public class Shell {
      * @param userHandler The ATAUserHandler to use for asking user for their input.
      */
     public Shell(PromiseHistoryClient promiseHistoryClient, ATAUserHandler userHandler) {
-        this.promiseHistoryClient = promiseHistoryClient;
         this.inputHandler = userHandler;
+        this.promiseHistoryClient = promiseHistoryClient;
     }
 
     /**
