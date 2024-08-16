@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  * and displaying the results.
  */
 public class Shell {
+    public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
     private static final Logger LOGGER = Logger.getLogger(Shell.class.getName());
     private static final String CONTINUE_PROMPT = "Would you like to enter another orderId? (y/n)";
     private static final Collection<String> VALID_YES_NO_ANSWERS =
@@ -34,7 +35,7 @@ public class Shell {
             "Unable to find any order data for orderId: %s. Please check your order id and try again.";
     private static final String INLINE_PROMPT = "> ";
 
-    public static final String SHOW_FIXTURES_FLAG = "--show-fixtures";
+
 
     private final PromiseHistoryClient promiseHistoryClient;
     private final ATAUserHandler inputHandler;
