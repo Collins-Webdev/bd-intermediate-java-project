@@ -1,11 +1,11 @@
 package com.amazon.ata.deliveringonourpromise.dao;
 
-import com.amazon.ata.deliveringonourpromise.types.Promise;
+import com.amazon.ata.deliveringonourpromise.comparators.PromiseAsinComparator;
 import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
+import com.amazon.ata.deliveringonourpromise.types.Promise;
 import com.amazon.ata.ordermanipulationauthority.OrderResult;
 import com.amazon.ata.ordermanipulationauthority.OrderResultItem;
 import com.amazon.ata.ordermanipulationauthority.OrderShipment;
-import com.amazon.ata.deliveringonourpromise.comparators.PromiseAsinComparator;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
