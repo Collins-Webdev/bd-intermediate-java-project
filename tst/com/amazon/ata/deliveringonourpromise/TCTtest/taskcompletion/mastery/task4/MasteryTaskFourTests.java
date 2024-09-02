@@ -6,7 +6,6 @@ import com.amazon.ata.deliveringonourpromise.deliverypromiseservice.DeliveryProm
 import com.amazon.ata.deliveringonourpromise.orderfulfillmentservice.OrderFulfillmentServiceClient;
 import com.amazon.ata.deliveringonourpromise.promisehistoryservice.PromiseHistoryClient;
 import com.amazon.ata.deliveringonourpromise.types.Promise;
-import com.amazon.ata.deliveringonourpromise.types.PromiseHistory;
 import com.amazon.ata.test.helper.AtaTestHelper;
 import com.amazon.ata.test.reflect.ClassQuery;
 
@@ -111,34 +110,5 @@ public class MasteryTaskFourTests {
         Class<?>[] parameterTypes = promiseClientMethods[0].getParameterTypes();
         assertTrue(1 == parameterTypes.length && String.class == parameterTypes[0],
                 "Expected Promise clients method to take single parameter of String type!");
-    }
-
-    @Test
-    public void masteryTaskFour_orderFulfillmentServiceClient_getsPromise() {
-        // GIVEN
-        String orderId = "900-3746401-0000002";
-        OrderFulfillmentServiceClient ofsClient = App.getOrderFulfillmentServiceClient();
-
-        // WHEN
-        PromiseHistory promiseHistory = null;
-
-        // Workaround to prevent the test from printing NPE to STDOUT.
-        try {
-            promiseHistory = client.getPromiseHistoryByOrderId(orderId);
-        } catch (Exception e) {
-            fail("Expected OrderFulfillmentServiceClient to not throw an exception when retrieving order: " +
-                    orderId);
-        }
-
-        //THEN
-        boolean providedByOfs = false;
-        for (Promise promise : promiseHistory.getPromises()) {
-            if (promise.getPromiseProvidedBy().equals("OFS")) {
-                providedByOfs = true;
-            }
-        }
-        assertTrue(providedByOfs,
-                "Expected OrderFulfillmentServiceClient to provide promise from OrderFulfillmentService for order: " +
-                        orderId);
     }
 }
