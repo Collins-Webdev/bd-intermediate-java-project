@@ -10,8 +10,8 @@ import com.amazon.ata.deliveringonourpromise.orderfulfillmentservice.OrderFulfil
 import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
 import com.amazon.ata.deliveringonourpromise.promisehistoryservice.PromiseHistoryClient;
 import com.amazon.ata.deliverypromiseservice.service.DeliveryPromiseService;
-import com.amazon.ata.ordermanipulationauthority.OrderManipulationAuthority;
 import com.amazon.ata.orderfulfillmentservice.OrderFulfillmentService;
+import com.amazon.ata.ordermanipulationauthority.OrderManipulationAuthority;
 
 import java.util.Arrays;
 import java.util.List;

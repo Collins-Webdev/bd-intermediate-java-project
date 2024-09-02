@@ -16,10 +16,10 @@ public class GetPromiseHistoryByOrderIdActivity {
     private ReadOnlyDao<String, List<Promise>> promiseDao;
 
     /**
-     * Instantiates an activity for handling the API, accepting the relevant DAOs to
-     * perform its work.
+     * Instantiates an activity for handling the API, accepting the relevant DAOs
+     * to perform its work.
      *
-     * @param orderDao data access object fo retrieving Orders by order ID
+     * @param orderDao data access object for retrieving Orders by order ID
      * @param promiseDao data access object for retrieving Promises by order item ID
      */
     public GetPromiseHistoryByOrderIdActivity(ReadOnlyDao<String, Order> orderDao,
@@ -29,8 +29,9 @@ public class GetPromiseHistoryByOrderIdActivity {
     }
 
     /**
-     * Returns the PromiseHistory for the given order ID, if the order exists. If the order does
-     * not exist a PromiseHistory with a null order and no promises will be returned.
+     * Returns the PromiseHistory for the given order ID, if the order exists. If
+     * the order does not exist, a PromiseHistory with a null order and no promises
+     * will be returned.
      * @param orderId The order ID to fetch PromiseHistory for
      * @return PromiseHistory containing the order and promise history for that order
      */
